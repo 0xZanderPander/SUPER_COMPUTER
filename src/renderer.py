@@ -1,5 +1,5 @@
-from collections.abc import Sequence
 from textwrap import wrap
+from typing import List, Sequence
 
 
 class Renderer:
@@ -7,11 +7,11 @@ class Renderer:
         self.width = width
         self.height = height
 
-    def frame(self, raw_lines: Sequence[str]) -> list[str]:
+    def frame(self, raw_lines: Sequence[str]) -> List[str]:
         lines = [line.rstrip("\n") for line in raw_lines]
         return self._center_block(lines)
 
-    def message(self, text: str) -> list[str]:
+    def message(self, text: str) -> List[str]:
         wrapped = wrap(text, width=self.width - 2) or [""]
         if len(wrapped) == 1:
             quoted = [f'"{wrapped[0]}"']
@@ -20,10 +20,10 @@ class Renderer:
             quoted[-1] = f'{quoted[-1]}"'
         return self._center_block(quoted)
 
-    def boot(self, lines: Sequence[str]) -> list[str]:
+    def boot(self, lines: Sequence[str]) -> List[str]:
         return self._center_block(lines)
 
-    def _center_block(self, lines: Sequence[str]) -> list[str]:
+    def _center_block(self, lines: Sequence[str]) -> List[str]:
         trimmed = [line[: self.width] for line in lines]
         visible = trimmed[: self.height]
         top_padding = max((self.height - len(visible)) // 2, 0)
