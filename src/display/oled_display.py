@@ -1,6 +1,12 @@
 from collections.abc import Sequence
 
-from display.base import Display
+from src.display.base import Display
+
+
+OLED_NOT_READY_MESSAGE = (
+    "OLED output is not implemented in SUPER_COMPUTER v0.1. "
+    "Use '--display terminal' for this milestone."
+)
 
 
 class OledDisplay(Display):
@@ -15,10 +21,10 @@ class OledDisplay(Display):
         self.height = height
 
     def start(self) -> None:
-        raise NotImplementedError("OLED output is planned for a later milestone.")
+        raise RuntimeError(OLED_NOT_READY_MESSAGE)
 
     def render(self, lines: Sequence[str]) -> None:
-        raise NotImplementedError("OLED output is planned for a later milestone.")
+        raise RuntimeError(OLED_NOT_READY_MESSAGE)
 
     def stop(self) -> None:
         pass
