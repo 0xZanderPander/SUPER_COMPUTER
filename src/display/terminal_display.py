@@ -1,7 +1,7 @@
 import sys
 from collections.abc import Sequence
 
-from display.base import Display
+from src.display.base import Display
 
 
 class TerminalDisplay(Display):
