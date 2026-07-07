@@ -1,5 +1,5 @@
-from textwrap import wrap
 from typing import List, Sequence
+from textwrap import wrap
 
 
 class Renderer:
