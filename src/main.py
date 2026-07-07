@@ -3,6 +3,7 @@ import sys
 import time
 from itertools import cycle
 from pathlib import Path
+from typing import List
 
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -57,7 +58,7 @@ def build_display(name: str, config: AppConfig) -> Display:
     return OledDisplay(config.canvas_width, config.canvas_height)
 
 
-def show_for(display: Display, lines: list[str], seconds: float) -> None:
+def show_for(display: Display, lines: List[str], seconds: float) -> None:
     display.render(lines)
     time.sleep(seconds)
 
