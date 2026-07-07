@@ -29,6 +29,12 @@ This first milestone implements terminal simulation mode for macOS development.
 python src/main.py --display terminal
 ```
 
+If your macOS shell does not have a `python` alias:
+
+```sh
+python3 src/main.py --display terminal
+```
+
 Stop with `Ctrl+C`.
 
 For a quick smoke test:
