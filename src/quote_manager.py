@@ -1,5 +1,6 @@
 import random
 from pathlib import Path
+from typing import List
 
 
 class QuoteManager:
@@ -12,11 +13,11 @@ class QuoteManager:
             raise RuntimeError(f"No quotes found in {self.quote_dir}")
         return random.choice(self.quotes)
 
-    def _load_quotes(self) -> list[str]:
+    def _load_quotes(self) -> List[str]:
         if not self.quote_dir.exists():
             return []
 
-        quotes: list[str] = []
+        quotes: List[str] = []
         for quote_path in sorted(self.quote_dir.glob("*.txt")):
             for line in quote_path.read_text(encoding="utf-8").splitlines():
                 cleaned = line.strip()
