@@ -1,13 +1,19 @@
 import argparse
+import sys
 import time
 from itertools import cycle
+from pathlib import Path
 
-from config import BOOT_LINES, AppConfig
-from display.oled_display import OledDisplay
-from display.terminal_display import TerminalDisplay
-from quote_manager import QuoteManager
-from renderer import Renderer
-from scene_manager import SceneManager
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from src.config import BOOT_LINES, AppConfig
+from src.display.base import Display
+from src.display.oled_display import OledDisplay
+from src.display.terminal_display import TerminalDisplay
+from src.quote_manager import QuoteManager
+from src.renderer import Renderer
+from src.scene_manager import Animation, SceneManager
 
 
 def parse_args() -> argparse.Namespace:
@@ -45,18 +51,24 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def build_display(name: str, config: AppConfig):
+def build_display(name: str, config: AppConfig) -> Display:
     if name == "terminal":
         return TerminalDisplay(config.canvas_width, config.canvas_height)
     return OledDisplay(config.canvas_width, config.canvas_height)
 
 
-def show_for(display, lines: list[str], seconds: float) -> None:
+def show_for(display: Display, lines: list[str], seconds: float) -> None:
     display.render(lines)
     time.sleep(seconds)
 
 
-def play_animation(display, renderer: Renderer, animation, duration: float, frame_delay: float) -> None:
+def play_animation(
+    display: Display,
+    renderer: Renderer,
+    animation: Animation,
+    duration: float,
+    frame_delay: float,
+) -> None:
     end_time = time.monotonic() + duration
     for raw_frame in cycle(animation.frames):
         display.render(renderer.frame(raw_frame))
@@ -77,7 +89,12 @@ def main() -> int:
     scenes = SceneManager(config.animation_dir)
     quotes = QuoteManager(config.quote_dir)
 
-    display.start()
+    try:
+        display.start()
+    except RuntimeError as error:
+        print(f"SUPER_COMPUTER: {error}", file=sys.stderr)
+        return 1
+
     try:
         show_for(display, renderer.boot(BOOT_LINES), config.boot_duration_seconds)
 
